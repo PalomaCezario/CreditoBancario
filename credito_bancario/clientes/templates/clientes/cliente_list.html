@@ -1,13 +1,19 @@
 <!-- clientes/templates/clientes/cliente_list.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="{% static 'css/cliente_list.css' %}">
 </head>
 <body>
+    <header>
+    </header>
+   
     <h1>Lista de Clientes</h1>
     <a href="{% url 'cliente-create' %}">Adicionar Novo Cliente</a>
+    <main>
     <ul>
         {% for cliente in clientes %}
             <li>
@@ -17,5 +23,6 @@
             </li>
         {% endfor %}
     </ul>
+</main>
 </body>
 </html>
