@@ -1,4 +1,4 @@
-from django.db import models # type: ignore
+from django.db import models  # type: ignore
 
 class Cliente(models.Model):
     SEXO_CHOICES = [
@@ -14,7 +14,6 @@ class Cliente(models.Model):
         ('Vitebsk region', 'Vitebsk region'),
         ('Grodno region', 'Grodno region'),
     ]
-
 
     ESTADO_CIVIL_CHOICES = [
         ('Married', 'Married'),
@@ -57,18 +56,20 @@ class Cliente(models.Model):
         ('Head/Deputy head (organiz.)', 'Head/Deputy head (organiz.)'),
     ]
 
+    nome = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
     sexo = models.CharField(max_length=5, choices=SEXO_CHOICES, default='Man')
     regiao = models.CharField(max_length=20, choices=REGIAO_CHOICES, default='Minsk region')
-    estado_civil = models.CharField(max_length=20, choices=ESTADO_CIVIL_CHOICES, default='Single')
+    estado_civil = models.CharField(max_length=20, choices=ESTADO_CIVIL_CHOICES, default='Single/unmarried')
     numero_filhos = models.CharField(max_length=15, choices=NUMERO_FILHOS_CHOICES, default='0')
     propriedade = models.CharField(max_length=15, choices=PROPRIEDADE_CHOICES, default='property')
-    educacao = models.CharField(max_length=100, choices=EDUCACAO_CHOICES, default='Secondary education')
+    educacao = models.CharField(max_length=100, choices=EDUCACAO_CHOICES, default='Secondary education (plus special education)')
     vinculo_empregaticio = models.CharField(max_length=15, choices=VINCULO_EMPREGATICIO_CHOICES, default='Work')
     fonte_renda = models.CharField(max_length=30, choices=FONTE_RENDA_CHOICES, default='NE employee')
-    marker = models.BooleanField(default=False)  # Coluna alvo para classificação de empréstimos
+    marker = models.BooleanField(default=False)  # Indica aprovação ou não de crédito
 
     def __str__(self):
-        return f"{self.sexo} - {self.regiao} - {self.estado_civil}"
+        return f"{self.nome} - {self.email} - {self.sexo}"
 
     class Meta:
         verbose_name = "Cliente"

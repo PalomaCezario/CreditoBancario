@@ -1,31 +1,24 @@
-from django.shortcuts import render # type: ignore
-from django.urls import reverse_lazy # type: ignore
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView # type: ignore
-from .models import Cliente
+from django.shortcuts import render  # type: ignore
+from .forms import ConsultaCreditoForm
 
-class ClienteListView(ListView):
-    model = Cliente
-    template_name = 'clientes/cliente_list.html'
-    context_object_name = 'clientes'  # para acessar a lista de clientes no template
+def home(request):
+    """
+    Renderiza a página inicial do app 'clientes'.
+    """
+    return render(request, 'clientes/home.html')  # Certifique-se de que o template existe
 
-class ClienteDetailView(DetailView):
-    model = Cliente
-    template_name = 'clientes/cliente_detail.html'
-    context_object_name = 'cliente'  # para acessar o cliente específico no template
+def consultar_credito(request):
+    """
+    Renderiza a página de consulta de crédito com o formulário baseado no ModelForm.
+    """
+    form = ConsultaCreditoForm()  # Inicializa o formulário vazio
+    resultado = None
 
-class ClienteCreateView(CreateView):
-    model = Cliente
-    template_name = 'clientes/cliente_form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('cliente-list')  # redireciona após criação
+    if request.method == 'POST':
+        form = ConsultaCreditoForm(request.POST)
+        if form.is_valid():
+            # Salve ou processe os dados aqui
+            cliente = form.save(commit=False)  # Se quiser salvar, use commit=True
+            resultado = f"Consulta realizada com sucesso para {cliente.nome}!"
 
-class ClienteUpdateView(UpdateView):
-    model = Cliente
-    template_name = 'clientes/cliente_form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('cliente-list')  # redireciona após atualização
-
-class ClienteDeleteView(DeleteView):
-    model = Cliente
-    template_name = 'clientes/cliente_confirm_delete.html'
-    success_url = reverse_lazy('cliente-list')  # redireciona após exclusão
+    return render(request, 'clientes/consultar_credito.html', {'form': form, 'resultado': resultado})

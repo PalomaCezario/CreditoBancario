@@ -1,9 +1,49 @@
-from django.contrib import admin # type: ignore
+from django.contrib import admin  # type: ignore
 from .models import Cliente
 
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('sexo', 'regiao', 'estado_civil', 'numero_filhos', 'propriedade', 'educacao', 'vinculo_empregaticio', 'fonte_renda', 'marker')
-    list_filter = ('sexo', 'regiao', 'estado_civil', 'numero_filhos', 'propriedade', 'educacao', 'vinculo_empregaticio', 'fonte_renda', 'marker')
-    search_fields = ('sexo', 'regiao', 'estado_civil')
+    # Exibição principal na lista de clientes no admin
+    list_display = (
+        'nome', 
+        'email', 
+        'sexo', 
+        'regiao', 
+        'estado_civil', 
+        'numero_filhos', 
+        'propriedade', 
+        'educacao', 
+        'vinculo_empregaticio', 
+        'fonte_renda', 
+        'marker',
+    )
+    # Filtros laterais para facilitar a segmentação
+    list_filter = (
+        'sexo', 
+        'regiao', 
+        'estado_civil', 
+        'numero_filhos', 
+        'propriedade', 
+        'educacao', 
+        'vinculo_empregaticio', 
+        'fonte_renda', 
+        'marker',
+    )
+    # Campos para busca rápida
+    search_fields = ('nome', 'email', 'sexo', 'regiao', 'estado_civil')
 
+    # Organização e leitura nos formulários do admin
+    fieldsets = (
+        ("Informações Pessoais", {
+            'fields': ('nome', 'email', 'sexo', 'estado_civil', 'numero_filhos')
+        }),
+        ("Informações Residenciais", {
+            'fields': ('regiao', 'propriedade')
+        }),
+        ("Informações Educacionais e Profissionais", {
+            'fields': ('educacao', 'vinculo_empregaticio', 'fonte_renda')
+        }),
+        ("Resultado da IA", {
+            'fields': ('marker',)
+        }),
+    )
