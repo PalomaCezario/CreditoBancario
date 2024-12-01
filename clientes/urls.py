@@ -3,5 +3,5 @@ from .views import home, consultar_credito
 
 urlpatterns = [
     path('', home, name='home'),  # Página inicial
-    path('consultar/', consultar_credito, name='consultar-credito'),  # Página de consulta de crédito
+    path('consultar/', consultar_credito, name='consultar-credito'),
 ]
