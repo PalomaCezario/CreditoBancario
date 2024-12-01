@@ -10,26 +10,57 @@
     <nav>
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="#">Sobre Nós</a></li>
-            <li><a href="#">Ajuda</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Help</a></li>
         </ul>
     </nav>
 </header>
+<div class="boxprincipal">
+    <h1>The bank credit made for you!</h1>
+    <h3>Escape Bank fees! Credit to business owners and entrepreneurs like you. No bureaucracy, no fees, and no paperwork.</h3>
+</div>
+
+<div class="divimagem">
+     <img src="media\imagem\creditobanco.png" alt="Minha imagem" class="foto">
+</div>
+<h2>With the word, our customers:</h2>
+<div class="clientes">
+    <div class="info">
+        <p>Sam Winchester</p>
+        <p>The analysis process was agile and efficient, fully meeting my expectations.</p>
+    </div>
+    <div class="info">
+        <p>Meridth Grey</p>
+        <p>I received the answer quickly, in a clear and practical way, making my decision easier.</p>
+    </div>
+    <div class="info">
+        <p>Elena Gilbert</p>
+        <p>The analysis was done quickly and effectively, it was very useful</p>
+    </div>
+</div>
+
 <body>
 <div class="container">
     <div class="div1">
-    <h1>Analise de Credito Online</h1>
-    <h3>✔  Solicitação em 5 minutos e 100% online</h3>
-    <h3>✔  Altas taxas de aprovação</h3>
-    <h3>✔  Segurança e sem burocracia</h3>
+    <h1>Online Credit Analysis</h1>
+    <h3>✔  Request in 5 minutes and 100% online</h3>
+    <h3>✔  High pass rates</h3>
+    <h3>✔  Security and no bureaucracy</h3>
+    <h3>✔  Interest rates below the current market </h3>
     </div>
+
     <div class="div2">
-    <h2>Consulte se você tem análise de crédito liberada.</h2>
-    <a class="btn" href="{% url 'consultar-credito' %}">Consultar</a>
+    <h1>Check if you have a credit analysis released</h1>
+    <h4>It's quick and easy: Apply in less than 5 minutes</h4>
+    <div class="checkbox-container">
+        <input type="checkbox" id="termos" name="termos">
+        <label for="termos">I have read and agree to the <a href="#" target="_blank">Privacy Policy</a></label>
+    </div>
+    <a class="btn" href="{% url 'consultar-credito' %}">consult</a>
     </div>
 </div>
     <footer>
-       <p>&copy; 2024 Crédito Fácil</p>
+       <p>&copy; 2024 Easy Credit</p>
     </footer>
 </body>
 </html>
