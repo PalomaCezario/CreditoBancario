@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta de Crédito</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">Sobre Nós</a></li>
+            <li><a href="#">Ajuda</a></li>
+        </ul>
+    </nav>
+</header>
+<body>
+<div class="container">
+    <div class="div1">
+    <h1>Analise de Credito Online</h1>
+    <h3>✔  Solicitação em 5 minutos e 100% online</h3>
+    <h3>✔  Altas taxas de aprovação</h3>
+    <h3>✔  Segurança e sem burocracia</h3>
+    </div>
+    <div class="div2">
+    <h2>Consulte se você tem análise de crédito liberada.</h2>
+    <a class="btn" href="{% url 'consultar-credito' %}">Consultar</a>
+    </div>
+</div>
+    <footer>
+       <p>&copy; 2024 Crédito Fácil</p>
+    </footer>
+</body>
+</html>

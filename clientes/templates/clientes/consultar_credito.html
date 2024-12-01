@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Crédito</title>
+    <link rel="stylesheet" href="{% static 'css/consultar_credito.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="#">Sobre Nós</a></li>
+                <li><a href="#">Ajuda</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Consulta de Crédito</h1>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Consultar</button>
+            </form>
+        </div>
+        {% if resultado %}
+        <div class="resultado">
+            <p>{{ resultado }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Crédito Fácil</p>
+    </footer>
+</body>
+</html>
