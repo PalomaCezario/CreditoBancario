@@ -2,12 +2,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #64c000, #3a7500);
     color: #333;
 }
 
 header {
-    background-color: #64c000;
+    background-color: #000000;
     padding: 10px 20px;
 }
 
@@ -51,7 +51,7 @@ header nav ul li a {
 
 .form-container form .btn {
     display: inline-block;
-    background-color: #64c000;
+    background-color: #f58625;
     color: #fff;
     padding: 10px 20px;
     text-align: center;
@@ -63,7 +63,7 @@ header nav ul li a {
 }
 
 footer {
-    background-color: #4b9000;
+    background-color: #000000;
     text-align: center;
     padding: 10px;
     color: #fff;
