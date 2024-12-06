@@ -2,65 +2,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Consulta de Crédito</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-</head>
-<header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Help</a></li>
-        </ul>
-    </nav>
-</header>
-<div class="boxprincipal">
-    <h1>The bank credit made for you!</h1>
-    <h3>Escape Bank fees! Credit to business owners and entrepreneurs like you. No bureaucracy, no fees, and no paperwork.</h3>
-</div>
-
-<div class="divimagem">
-     <img src="media\imagem\creditobanco.png" alt="Minha imagem" class="foto">
-</div>
-<h2>With the word, our customers:</h2>
-<div class="clientes">
-    <div class="info">
-        <p>Sam Winchester</p>
-        <p>The analysis process was agile and efficient, fully meeting my expectations.</p>
+        <meta charset="UTF-8">
+        <title>Credit Consultation</title>
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    </head>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="#">Credit Consultation
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="boxprincipal">
+        <h1>Find Out If You’re Eligible for Credit!</h1>
+        <h3>Say goodbye to banking hassles! Fast and simple assessment for business owners and entrepreneurs. No hidden fees, no red tape, and complete transparency.</h3>
     </div>
-    <div class="info">
-        <p>Meridth Grey</p>
-        <p>I received the answer quickly, in a clear and practical way, making my decision easier.</p>
+    
+    <div class="divimagem">
+         <img src="media\imagem\creditobanco.png" alt="Our Credit Services" class="foto">
     </div>
-    <div class="info">
-        <p>Elena Gilbert</p>
-        <p>The analysis was done quickly and effectively, it was very useful</p>
-    </div>
-</div>
-
-<body>
-<div class="container">
-    <div class="div1">
-    <h1>Online Credit Analysis</h1>
-    <h3>✔  Request in 5 minutes and 100% online</h3>
-    <h3>✔  High pass rates</h3>
-    <h3>✔  Security and no bureaucracy</h3>
-    <h3>✔  Interest rates below the current market </h3>
+    
+    
+    <body>
+    <div class="container">
+        <div class="div1">
+        <h1>Credit Eligibility Check</h1>
+        <h3>✔ Quickly check if you qualify for a credit offer.</h3>
+        <h3>✔ Simple and straightforward process</h3>
+        <h3>✔ No additional documents required.</h3>
+        <h3>✔ Get a response in just a few minutes!</h3>
+        </div>
+    
+        <div class="div2">
+        <h1>Check if your credit is approved</h1>
+        <h4>It's quick and easy: Apply in less than 5 minutes</h4>
+        <div class="checkbox-container">
+            <input type="checkbox" id="terms" name="terms">
+            <label for="terms">I have read and agree to the <a href="#" target="_blank">Privacy Policy</a></label>
+        </div>
+        <a class="btn" href="{% url 'consultar-credito' %}">Consult</a>
+        </div>
     </div>
 
-    <div class="div2">
-    <h1>Check if you have a credit analysis released</h1>
-    <h4>It's quick and easy: Apply in less than 5 minutes</h4>
-    <div class="checkbox-container">
-        <input type="checkbox" id="termos" name="termos">
-        <label for="termos">I have read and agree to the <a href="#" target="_blank">Privacy Policy</a></label>
+    <div class="dashboard-container">
+        <iframe src="http://127.0.0.1:8050" width="100%" height="600px" style="border: none;"></iframe>
     </div>
-    <a class="btn" href="{% url 'consultar-credito' %}">consult</a>
-    </div>
-</div>
-    <footer>
-       <p>&copy; 2024 Easy Credit</p>
-    </footer>
-</body>
-</html>
+    
+
+        <footer>
+           <p>&copy; 2024 Easy Credit</p>
+        </footer>
+    </body>
+    </html>
+    

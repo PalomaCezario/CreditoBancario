@@ -15,8 +15,9 @@ class ClienteAdmin(admin.ModelAdmin):
         'educacao', 
         'vinculo_empregaticio', 
         'fonte_renda', 
-        'marker',
+        'resultado_credito'
     )
+
     # Filtros laterais para facilitar a segmentação
     list_filter = (
         'sexo', 
@@ -27,7 +28,6 @@ class ClienteAdmin(admin.ModelAdmin):
         'educacao', 
         'vinculo_empregaticio', 
         'fonte_renda', 
-        'marker',
     )
     # Campos para busca rápida
     search_fields = ('nome', 'email', 'sexo', 'regiao', 'estado_civil')
@@ -43,7 +43,6 @@ class ClienteAdmin(admin.ModelAdmin):
         ("Informações Educacionais e Profissionais", {
             'fields': ('educacao', 'vinculo_empregaticio', 'fonte_renda')
         }),
-        ("Resultado da IA", {
-            'fields': ('marker',)
-        }),
+       
     )
+

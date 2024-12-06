@@ -66,7 +66,7 @@ class Cliente(models.Model):
     educacao = models.CharField(max_length=100, choices=EDUCACAO_CHOICES, default='Secondary education (plus special education)')
     vinculo_empregaticio = models.CharField(max_length=15, choices=VINCULO_EMPREGATICIO_CHOICES, default='Work')
     fonte_renda = models.CharField(max_length=30, choices=FONTE_RENDA_CHOICES, default='NE employee')
-    marker = models.BooleanField(default=False)  # Indica aprovação ou não de crédito
+    resultado_credito = models.CharField(max_length=100, null=True, blank=True)  # Campo para armazenar o resultado
 
     def __str__(self):
         return f"{self.nome} - {self.email} - {self.sexo}"

@@ -44,13 +44,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 ]
 
-# Configuração do REST Framework com autenticação JWT
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # Autenticação opcional ou removida para certas views
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # Remova a permissão global, se necessário, e use a permissão específica nas views
+        'rest_framework.permissions.AllowAny',
     ),
 }
 

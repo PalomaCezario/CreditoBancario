@@ -1,3 +1,7 @@
+import numpy as np
+import keras
+import joblib
+import pandas as pd
 from django.shortcuts import render  
 from .forms import ConsultaCreditoForm
 from rest_framework import generics, status, views
@@ -6,10 +10,32 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ClienteSerializer
 from .models import Cliente
-import numpy as np
-import keras
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.permissions import AllowAny 
+from .forms import ConsultaCreditoForm
+from tensorflow.keras.models import load_model
+from joblib import load
+from sklearn.preprocessing import LabelEncoder
 
+scaler = load('C:/Users/limmw/OneDrive/Área de Trabalho/back-ia/creditobancario/model/scaler.pkl')
+label_encoder = joblib.load('C:/Users/limmw/OneDrive/Área de Trabalho/back-ia/creditobancario/model/label_encoder.pkl')
+
+# Carregar o modelo de IA
+
+modelo = load_model('C:/Users/limmw/OneDrive/Área de Trabalho/back-ia/creditobancario/model/modelo_treinado_cd.h5')
+
+
+def validar_dados(dados):
+    if not isinstance(dados, np.ndarray):
+        raise ValueError("Os dados de entrada devem ser um array NumPy.")
+    if dados.shape[1] != X_train.shape[1]:  # X_train.shape[1] é o número de colunas usadas no treino
+        raise ValueError(f"Os dados devem ter {X_train.shape[1]} colunas.")
+ 
+# Exemplo de uso no backend para normalizar novos dados antes da previsão
+def prever(dados):
+    dados_normalizados = scaler.transform(dados)  # Normalizar os dados
+    resultado = modelo.predict(dados_normalizados)  # Realizar a previsão
+    return resultado
 
 def home(request):
     """
@@ -17,22 +43,73 @@ def home(request):
     """
     return render(request, 'clientes/home.html')  # Certifique-se de que o template existe
 
+def preprocessar_dados(dados_entrada, scaler, label_encoder, num_features=16):
+    """
+    Função para processar os dados de entrada de acordo com a necessidade do modelo.
+    """
+    # Convertendo os dados de entrada para DataFrame
+    df = pd.DataFrame([dados_entrada])
+
+    # Adicionando as colunas numéricas com valores padrão (zeros)
+    num_colunas = num_features - df.shape[1]  # Quantidade de colunas numéricas necessárias
+    for _ in range(num_colunas):
+        df[f'num_feature_{_}'] = 0  # Adiciona colunas numéricas com valor 0
+
+    # Reordenando as colunas para garantir que a ordem esteja de acordo com o modelo
+    df = df[sorted(df.columns)]
+
+    # Aplicando a codificação LabelEncoder às variáveis categóricas
+    for column in df.select_dtypes(include=['object']).columns:
+        df[column] = df[column].apply(
+            lambda x: label_encoder.transform([x])[0] if x in label_encoder.classes_ else -1
+        )
+
+    # Transformando os dados com o scaler usado no treinamento
+    dados_entrada_processados = scaler.transform(df)
+
+    return dados_entrada_processados
+
+
 def consultar_credito(request):
-    """
-    Renderiza a página de consulta de crédito com o formulário baseado no ModelForm.
-    """
-    form = ConsultaCreditoForm()  # Inicializa o formulário vazio
+    form = ConsultaCreditoForm()
     resultado = None
 
     if request.method == 'POST':
         form = ConsultaCreditoForm(request.POST)
         if form.is_valid():
-            # Salve ou processe os dados aqui
-            cliente = form.save(commit=False)  # Se quiser salvar, use commit=True
-            resultado = f"Consulta realizada com sucesso para {cliente.nome}!"
+            # Obter os dados do formulário
+            cliente = form.save(commit=False)
+            dados_entrada = {
+                "sexo": cliente.sexo,
+                "regiao": cliente.regiao,
+                "estado_civil": cliente.estado_civil,
+                "numero_filhos": cliente.numero_filhos,
+                "propriedade": cliente.propriedade,
+                "educacao": cliente.educacao,
+                "vinculo_empregaticio": cliente.vinculo_empregaticio,
+                "fonte_renda": cliente.fonte_renda,
+            }
+            
+            cliente.previsao_resultado = resultado
+            cliente.save() 
+            try:
+                # Processar os dados de entrada
+                dados_entrada_processados = preprocessar_dados(dados_entrada, scaler, label_encoder)
+
+                # Ajustar a forma dos dados para (1, 16)
+                dados_entrada_processados = dados_entrada_processados.reshape((1, 16))
+
+                # Fazer a previsão com o modelo de IA
+                
+                previsao = modelo.predict(dados_entrada_processados)
+
+                # Interpretando a previsão
+                resultado = "Aptidão para concessão de empréstimo: Concedido!" if previsao[0][0] > 0.5 else "Aptidão para concessão de empréstimo: Negado!"
+
+            except Exception as e:
+                resultado = f"Erro no processamento: {str(e)}"
 
     return render(request, 'clientes/consultar_credito.html', {'form': form, 'resultado': resultado})
-
 
 
 # Carregar o modelo ao iniciar
@@ -43,8 +120,9 @@ model = keras.models.load_model(MODEL_PATH)
 class ClienteListView(generics.ListAPIView):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]  # Permissão sem autenticação
+    authentication_classes = []  # Sem autenticação
+
 
     @swagger_auto_schema(
         operation_description="Listar todos os clientes",
@@ -57,11 +135,12 @@ class ClienteListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class ClienteDetailView(generics.RetrieveAPIView):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]  # Permissão sem autenticação
+    authentication_classes = []  # Sem autenticação
 
     @swagger_auto_schema(
         operation_description="Obter detalhes de um cliente específico",
@@ -75,11 +154,12 @@ class ClienteDetailView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class ClienteCreateView(generics.CreateAPIView):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]  # Permissão sem autenticação
+    authentication_classes = []  # Sem autenticação
 
     @swagger_auto_schema(
         operation_description="Criar um novo cliente",
@@ -96,8 +176,8 @@ class ClienteCreateView(generics.CreateAPIView):
 class ClienteUpdateView(generics.UpdateAPIView):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]  # Permissão sem autenticação
+    authentication_classes = []  # Sem autenticação
 
     @swagger_auto_schema(
         operation_description="Atualizar um cliente existente",
@@ -115,8 +195,8 @@ class ClienteUpdateView(generics.UpdateAPIView):
 class ClienteDeleteView(generics.DestroyAPIView):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]  # Permissão sem autenticação
+    authentication_classes = []  # Sem autenticação
 
     @swagger_auto_schema(
         operation_description="Excluir um cliente",
@@ -130,10 +210,10 @@ class ClienteDeleteView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
-
 class PredictView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    # Remover a autenticação, se não for necessária
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(operation_description="Realizar predição com o modelo treinado")
     def post(self, request, *args, **kwargs):
